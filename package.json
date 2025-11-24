@@ -1,0 +1,12 @@
+{
+  "name": "fulll",
+  "version": "1.0.0",
+  "scripts": {
+    "algo": "tsx algo/main.ts"
+  },
+  "author": "Johann-S <johann.servoire@gmail.com>",
+  "description": "Test fulll",
+  "devDependencies": {
+    "tsx": "^4.20.6"
+  }
+}
