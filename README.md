@@ -27,6 +27,13 @@ Classic FizzBuzz implementation with a scalable, rule-based architecture.
 npm run algo
 ```
 
+**Test:**
+```bash
+npm run test:algo
+```
+
+This will run all unit tests across using Node.js's native test runner.
+
 ## Technologies Used
 
 - **TypeScript** - Type-safe JavaScript

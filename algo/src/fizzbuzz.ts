@@ -1,10 +1,3 @@
-/**
- * FizzBuzz Implementation
- *
- * A scalable and extensible implementation of the FizzBuzz algorithm.
- * This solution allows for easy configuration and extension of rules.
- */
-
 interface FizzBuzzRule {
   divisor: number;
   output: string;
@@ -65,7 +58,7 @@ const getFizzBuzzValue = (num: number, rules: FizzBuzzRule[]): string => {
  *
  * @param config - Configuration object containing rules and range
  */
-const fizzBuzz = (config: FizzBuzzConfig) => {
+export const fizzBuzz = (config: FizzBuzzConfig) => {
   validateConfig(config);
 
   const { rules, start = 1, end } = config;
@@ -77,26 +70,3 @@ const fizzBuzz = (config: FizzBuzzConfig) => {
 
   return results;
 };
-
-const main = () => {
-  const start = 1;
-  const end = 20;
-
-  console.log(`=== FizzBuzz (${start} to ${end}) ===\n`);
-
-  fizzBuzz({
-    rules: [
-      { divisor: 3, output: 'Fizz' },
-      { divisor: 5, output: 'Buzz' }
-    ],
-    start,
-    end
-  })
-    .forEach((value, index) => {
-      const num = start + index;
-
-      console.log(`${num}: ${value}`);
-    });
-};
-
-main();

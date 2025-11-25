@@ -2,11 +2,13 @@
   "name": "fulll",
   "version": "1.0.0",
   "scripts": {
-    "algo": "tsx algo/main.ts"
+    "algo": "tsx algo/src/main.ts",
+    "test:algo": "tsx --test algo/src/**/*.test.ts"
   },
   "author": "Johann-S <johann.servoire@gmail.com>",
   "description": "Test fulll",
   "devDependencies": {
+    "@types/node": "^22.19.1",
     "tsx": "^4.20.6"
   }
 }

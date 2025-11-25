@@ -10,6 +10,18 @@ From the root folder of the project, run:
 npm run algo
 ```
 
+## Running Tests
+
+To run the unit tests:
+
+```bash
+npm run test:algo
+```
+
+The test suite includes:
+- Basic FizzBuzz behavior (numbers, Fizz, Buzz, FizzBuzz)
+- Usage of a custom rule
+
 ## Problem Description
 
 Display numbers between 1 and N following these rules:
