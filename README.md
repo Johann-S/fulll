@@ -34,8 +34,31 @@ npm run test:algo
 
 This will run all unit tests across using Node.js's native test runner.
 
+### [Back/DDD/CQRS] Vehicle Fleet Parking Management
+
+Vehicle fleet management system using Domain-Driven Design (DDD) and CQRS principles with BDD tests.
+
+- 📁 **Location**: [`fleet/`](./fleet)
+- 🏗️ **Architecture**: DDD/CQRS with clean architecture
+- 🧪 **Testing**: Cucumber.js BDD tests
+
+**Test:**
+```bash
+npm run test:fleet
+```
+
+This will run all BDD scenarios using Cucumber.js.
+
+**Features:**
+- Register vehicles into fleets
+- Park vehicles at locations (GPS coordinates)
+- Query vehicle locations
+- In-memory persistence
+- Complete test coverage with Gherkin scenarios
+
 ## Technologies Used
 
 - **TypeScript** - Type-safe JavaScript
 - **tsx** - TypeScript execution engine
 - **Node.js** - Runtime environment
+- **Cucumber.js** - BDD testing framework

@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "scripts": {
     "algo": "tsx algo/src/main.ts",
-    "test:algo": "tsx --test algo/src/**/*.test.ts"
+    "test:algo": "tsx --test algo/src/**/*.test.ts",
+    "test:fleet": "cucumber-js -c fleet/cucumber.js"
   },
   "author": "Johann-S <johann.servoire@gmail.com>",
   "description": "Test fulll",
   "devDependencies": {
+    "@cucumber/cucumber": "^12.2.0",
     "@types/node": "^22.19.1",
     "tsx": "^4.20.6"
   },
