@@ -83,6 +83,20 @@ npm run fleet -- get-vehicle-location <fleetId> <vehiclePlateNumber>
 - Complete test coverage with Gherkin scenarios
 - Command-line interface for all operations
 
+## CI/CD
+
+This project includes a GitHub Actions workflow for continuous integration.
+
+**Workflow:** `.github/workflows/test.yml`
+
+The CI pipeline automatically:
+- Triggers on pushes and pull requests to the `main` branch
+- Sets up Node.js 22.x environment
+- Installs dependencies with `npm ci`
+- Runs all tests with `npm test` which will run all the tests for `fizzBuzz` and `fleet` projects.
+
+This ensures code quality and test coverage are maintained.
+
 ## Technologies Used
 
 - **TypeScript** - Type-safe JavaScript
@@ -93,3 +107,4 @@ npm run fleet -- get-vehicle-location <fleetId> <vehiclePlateNumber>
 - **Drizzle ORM** - TypeScript ORM for PostgreSQL
 - **PostgreSQL** - Relational database
 - **Docker** - Containerization
+- **GitHub Actions** - CI/CD automation

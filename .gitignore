@@ -1,3 +1,4 @@
 node_modules
 fleet/cucumber-report.html
 .env
+fleet/dist

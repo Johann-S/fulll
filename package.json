@@ -7,6 +7,7 @@
   },
   "scripts": {
     "algo": "tsx algo/src/main.ts",
+    "test": "npm run test:algo && npm run test:fleet && npm run build:fleet",
     "test:algo": "tsx --test algo/src/**/*.test.ts",
     "test:fleet": "cucumber-js -c fleet/cucumber.cjs",
     "test:fleet:persistence": "cross-env TEST_PERSISTENCE=true cucumber-js -c fleet/cucumber.cjs --profile persistence",
@@ -32,7 +33,8 @@
     "@types/pg": "^8.15.6",
     "cross-env": "^10.1.0",
     "drizzle-kit": "^0.31.7",
-    "tsx": "^4.20.6"
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=22.0.0"
