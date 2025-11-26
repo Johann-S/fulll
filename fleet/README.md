@@ -8,64 +8,23 @@ This implementation follows clean architecture principles with clear separation 
 
 ### Directory Structure
 
-```
-fleet/
-├── src/
-│   ├── App/              # Application Layer (CQRS)
-│   │   ├── Command/      # Commands and handlers
-│   │   │   ├── CreateFleetCommand.ts
-│   │   │   ├── CreateFleetHandler.ts
-│   │   │   ├── RegisterVehicleCommand.ts
-│   │   │   ├── RegisterVehicleHandler.ts
-│   │   │   ├── ParkVehicleCommand.ts
-│   │   │   └── ParkVehicleHandler.ts
-│   │   ├── Query/        # Queries and handlers
-│   │   │   ├── GetVehicleLocationQuery.ts
-│   │   │   └── GetVehicleLocationHandler.ts
-│   │   └── FleetService.ts  # Application Service
-│   ├── Domain/           # Domain Layer (Business Logic)
-│   │   ├── Fleet.ts      # Aggregate Root
-│   │   ├── Vehicle.ts    # Value Object
-│   │   ├── Location.ts   # Value Object
-│   │   ├── FleetRepository.ts  # Repository Interface
-│   │   └── Errors/       # Domain Errors
-│   │       ├── VehicleAlreadyRegisteredError.ts
-│   │       ├── VehicleNotRegisteredError.ts
-│   │       └── VehicleAlreadyParkedError.ts
-│   ├── Infra/            # Infrastructure Layer
-│   │   ├── Database/     # Database configuration
-│   │   │   ├── connection.ts
-│   │   │   └── schema.ts
-│   │   ├── InMemoryFleetRepository.ts
-│   │   └── PostgresFleetRepository.ts
-│   ├── cli.ts            # CLI Entry Point
-│   └── tests/            # BDD Tests
-│       ├── features/     # Gherkin scenarios
-│       │   ├── register_vehicle.feature
-│       │   └── park_vehicle.feature
-│       ├── step_definitions/  # Cucumber steps
-│       │   ├── common.steps.ts
-│       │   ├── register_vehicle.steps.ts
-│       │   └── park_vehicle.steps.ts
-│       └── support/      # Test support (World)
-│           └── world.ts
-├── drizzle/              # Database migrations
-│   ├── meta/
-│   └── 0000_violet_zuras.sql
-├── cucumber.cjs          # Cucumber configuration
-├── drizzle.config.ts     # Drizzle ORM configuration
-└── tsconfig.json         # TypeScript configuration
-```
+The project is organized into three main layers:
+
+- **App**: Contains the Application Layer implementing CQRS (Command Query Responsibility Segregation). It defines Commands, Queries, and their respective Handlers.
+- **Domain**: Contains the Domain Layer with business logic, including the Aggregate Root (`Fleet`), Value Objects (`Vehicle`, `Location`), and the Repository interface.
+- **Infra**: Contains the Infrastructure Layer with concrete implementations, such as the PostgreSQL repository and database configuration.
 
 ## Domain Model
 
 ### Entities & Value Objects
 
 - **Fleet** (Aggregate Root): Manages a collection of vehicles and their locations
+
   - Properties: `fleetId`, `userId`
   - Methods: `registerVehicle()`, `parkVehicle()`, `getVehicleLocation()`
 
 - **Vehicle** (Value Object): Represents a vehicle identified by plate number
+
   - Properties: `plateNumber`
 
 - **Location** (Value Object): GPS coordinates
@@ -73,8 +32,9 @@ fleet/
 
 ### Commands (Write Operations)
 
-- `RegisterVehicleCommand`: Register a vehicle into a fleet
+- `CreateFleetCommand`: Create a new fleet for a user
 - `ParkVehicleCommand`: Park a vehicle at a location
+- `RegisterVehicleCommand`: Register a vehicle into a fleet
 
 ### Queries (Read Operations)
 
@@ -86,6 +46,34 @@ fleet/
 2. A vehicle can belong to multiple fleets (different users)
 3. A vehicle cannot be parked at the same location twice in a row
 4. Location equality considers latitude, longitude, and altitude
+
+## Database Setup
+
+This project uses PostgreSQL for data persistence. This is required for:
+
+1. The **Persistence Profile** tests
+2. The **CLI** (when not using in-memory mode)
+
+### Prerequisites
+
+1. Configuration:
+   Copy `.env.example` to `.env` and fill in the values:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Start PostgreSQL (via Docker):
+
+   ```bash
+   docker-compose up -d
+   ```
+
+3. Apply database schema:
+
+   ```bash
+   npm run db:push
+   ```
 
 ## Testing
 
@@ -101,11 +89,6 @@ Runs tests with `InMemoryFleetRepository` - no database required:
 npm run test:fleet
 ```
 
-- ✅ Fast execution
-- ✅ No infrastructure setup needed
-- ✅ Perfect for TDD/development
-- ❌ Doesn't test real database integration
-
 #### 2. **Persistence Profile** (PostgreSQL, Integration)
 
 Runs tests tagged with `@persistence` using `PostgresFleetRepository`:
@@ -115,21 +98,8 @@ npm run test:fleet:persistence
 ```
 
 **Prerequisites:**
-1. PostgreSQL database running (via Docker):
-   ```bash
-   docker-compose up -d
-   ```
 
-2. Run migrations:
-   ```bash
-   npm run db:push
-   ```
-
-- ✅ Tests real database integration
-- ✅ Validates serialization/deserialization
-- ✅ Ensures PostgreSQL schema is correct
-- ❌ Slower execution
-- ❌ Requires infrastructure
+- Ensure the database is running and migrations are applied (see [Database Setup](#database-setup)).
 
 #### 3. **All Profile** (Both)
 
@@ -150,11 +120,13 @@ Following BDD best practices:
 ### BDD Features
 
 #### Register Vehicle (`register_vehicle.feature`)
+
 - ✅ Register a new vehicle into a fleet
 - ✅ Prevent duplicate registration in the same fleet
 - ✅ Allow same vehicle in multiple fleets
 
 #### Park Vehicle (`park_vehicle.feature`)
+
 - ✅ Successfully park a vehicle at a location
 - ✅ Prevent parking at the same location twice
 
@@ -167,6 +139,8 @@ The CLI is available after installing dependencies:
 ```bash
 npm ci
 ```
+
+> **Note**: All commands should be run from the project root directory.
 
 ### Usage
 
@@ -191,6 +165,7 @@ npm run fleet -- create <userId>
 ```
 
 **Example:**
+
 ```bash
 npm run fleet -- create user123
 # Output: 1
@@ -205,6 +180,7 @@ npm run fleet -- register-vehicle <fleetId> <vehiclePlateNumber>
 ```
 
 **Example:**
+
 ```bash
 npm run fleet -- register-vehicle 1 ABC-123
 # Output: Vehicle ABC-123 registered to fleet 1
@@ -219,6 +195,7 @@ npm run fleet -- localize-vehicle <fleetId> <vehiclePlateNumber> <lat> <lng> [al
 ```
 
 **Examples:**
+
 ```bash
 # Without altitude
 npm run fleet -- localize-vehicle 1 ABC-123 48.8566 2.3522
@@ -238,6 +215,7 @@ npm run fleet -- get-vehicle-location <fleetId> <vehiclePlateNumber>
 ```
 
 **Example:**
+
 ```bash
 npm run fleet -- get-vehicle-location 1 ABC-123
 # Output: Vehicle ABC-123 is at 48.8566, 2.3522, 100
@@ -246,6 +224,7 @@ npm run fleet -- get-vehicle-location 1 ABC-123
 Retrieves the current GPS location of a vehicle in the specified fleet. Returns latitude, longitude, and altitude (if set).
 
 **Error case:**
+
 ```bash
 # Vehicle not registered in the fleet
 npm run fleet -- get-vehicle-location 1 XYZ-999
@@ -258,21 +237,7 @@ The CLI uses **PostgreSQL** for data persistence when properly configured.
 
 #### Setup PostgreSQL
 
-1. Start the database:
-   ```bash
-   docker-compose up -d
-   ```
-
-2. Run migrations:
-   ```bash
-   npm run db:push
-   ```
-
-3. Configure environment (optional - defaults work with Docker setup):
-   ```bash
-   cp .env.example .env
-   # Edit .env if needed
-   ```
+Ensure the database is running and migrations are applied (see [Database Setup](#database-setup)).
 
 Fleet data persists between CLI invocations when using PostgreSQL.
 

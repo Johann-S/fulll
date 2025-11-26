@@ -23,11 +23,13 @@ Classic FizzBuzz implementation with a scalable, rule-based architecture.
 - 📖 **Documentation**: [algo/README.md](./algo/README.md)
 
 **Run:**
+
 ```bash
 npm run algo
 ```
 
 **Test:**
+
 ```bash
 npm run test:algo
 ```
@@ -39,27 +41,13 @@ This will run all unit tests across using Node.js's native test runner.
 Vehicle fleet management system using Domain-Driven Design (DDD) and CQRS principles with BDD tests and CLI.
 
 - 📁 **Location**: [`fleet/`](./fleet)
+- 📖 **Documentation**: [fleet/README.md](./fleet/README.md)
 - 🏗️ **Architecture**: DDD/CQRS with clean architecture
 - 🧪 **Testing**: Cucumber.js BDD tests
 - 🖥️ **CLI**: Commander.js-based command-line interface
 
-**Test:**
-```bash
-npm run test:fleet
-```
-
-This will run all BDD scenarios using Cucumber.js.
-
-**Database Setup:**
-```bash
-# Start PostgreSQL with Docker
-docker-compose up -d
-
-# Apply db schema
-npm run db:push
-```
-
 **CLI Usage:**
+
 ```bash
 # Using npm script
 npm run fleet -- create <userId>
@@ -75,6 +63,7 @@ npm run fleet -- get-vehicle-location <fleetId> <vehiclePlateNumber>
 ```
 
 **Features:**
+
 - Register vehicles into fleets
 - Park vehicles at locations (GPS coordinates)
 - Query vehicle locations
@@ -90,10 +79,13 @@ This project includes a GitHub Actions workflow for continuous integration.
 **Workflow:** `.github/workflows/test.yml`
 
 The CI pipeline automatically:
+
 - Triggers on pushes and pull requests to the `main` branch
 - Sets up Node.js 22.x environment
 - Installs dependencies with `npm ci`
+- Runs linting with `npm run lint`
 - Runs all tests with `npm test` which will run all the tests for `fizzBuzz` and `fleet` projects.
+- Builds the fleet project with `npm run build:fleet`
 
 This ensures code quality and test coverage are maintained.
 
@@ -102,6 +94,7 @@ This ensures code quality and test coverage are maintained.
 This project uses **ESLint** for static code analysis and code quality enforcement.
 
 **Why ESLint was added:**
+
 - **Static analysis** - Catches bugs, anti-patterns, and code smells before runtime
 - **Type safety enforcement** - TypeScript-aware rules prevent type-related issues and ensure type safety
 - **Code consistency** - Enforces consistent coding conventions (naming, imports, formatting) across the codebase
@@ -109,11 +102,13 @@ This project uses **ESLint** for static code analysis and code quality enforceme
 - **Maintainability** - Makes code easier to read, review, and maintain for the entire team
 
 **Run linting:**
+
 ```bash
 npm run lint
 ```
 
 The ESLint configuration includes:
+
 - TypeScript-specific rules for type safety
 - Stylistic rules for consistent code formatting
 - Best practices enforcement (prefer const, no var, etc.)
