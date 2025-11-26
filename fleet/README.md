@@ -13,21 +13,48 @@ fleet/
 ├── src/
 │   ├── App/              # Application Layer (CQRS)
 │   │   ├── Command/      # Commands and handlers
-│   │   └── Query/        # Queries and handlers
+│   │   │   ├── CreateFleetCommand.ts
+│   │   │   ├── CreateFleetHandler.ts
+│   │   │   ├── RegisterVehicleCommand.ts
+│   │   │   ├── RegisterVehicleHandler.ts
+│   │   │   ├── ParkVehicleCommand.ts
+│   │   │   └── ParkVehicleHandler.ts
+│   │   ├── Query/        # Queries and handlers
+│   │   │   ├── GetVehicleLocationQuery.ts
+│   │   │   └── GetVehicleLocationHandler.ts
+│   │   └── FleetService.ts  # Application Service
 │   ├── Domain/           # Domain Layer (Business Logic)
 │   │   ├── Fleet.ts      # Aggregate Root
 │   │   ├── Vehicle.ts    # Value Object
 │   │   ├── Location.ts   # Value Object
 │   │   ├── FleetRepository.ts  # Repository Interface
 │   │   └── Errors/       # Domain Errors
+│   │       ├── VehicleAlreadyRegisteredError.ts
+│   │       ├── VehicleNotRegisteredError.ts
+│   │       └── VehicleAlreadyParkedError.ts
 │   ├── Infra/            # Infrastructure Layer
-│   │   └── InMemoryFleetRepository.ts
+│   │   ├── Database/     # Database configuration
+│   │   │   ├── connection.ts
+│   │   │   └── schema.ts
+│   │   ├── InMemoryFleetRepository.ts
+│   │   └── PostgresFleetRepository.ts
 │   ├── cli.ts            # CLI Entry Point
 │   └── tests/            # BDD Tests
 │       ├── features/     # Gherkin scenarios
+│       │   ├── register_vehicle.feature
+│       │   └── park_vehicle.feature
 │       ├── step_definitions/  # Cucumber steps
+│       │   ├── common.steps.ts
+│       │   ├── register_vehicle.steps.ts
+│       │   └── park_vehicle.steps.ts
 │       └── support/      # Test support (World)
-└── cucumber.js           # Cucumber configuration
+│           └── world.ts
+├── drizzle/              # Database migrations
+│   ├── meta/
+│   └── 0000_violet_zuras.sql
+├── cucumber.cjs          # Cucumber configuration
+├── drizzle.config.ts     # Drizzle ORM configuration
+└── tsconfig.json         # TypeScript configuration
 ```
 
 ## Domain Model
