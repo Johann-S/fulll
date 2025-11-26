@@ -16,14 +16,43 @@ jobs:
       matrix:
         node-version: [22.x]
 
+    services:
+      postgres:
+        image: postgres:18.1-alpine3.22
+        env:
+          POSTGRES_USER: fleet
+          POSTGRES_PASSWORD: fleet_password
+          POSTGRES_DB: fleet_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
-    - uses: actions/checkout@v6
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v6
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run lint
-    - run: npm test
-    - run: npm run build:fleet
+      - uses: actions/checkout@v6
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run db:push
+        env:
+          POSTGRES_USER: fleet
+          POSTGRES_PASSWORD: fleet_password
+          POSTGRES_DB: fleet_db
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+      - run: npm run test:algo
+      - run: npm run test:fleet:all
+        env:
+          POSTGRES_USER: fleet
+          POSTGRES_PASSWORD: fleet_password
+          POSTGRES_DB: fleet_db
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+      - run: npm run build:fleet

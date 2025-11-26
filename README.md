@@ -82,9 +82,12 @@ The CI pipeline automatically:
 
 - Triggers on pushes and pull requests to the `main` branch
 - Sets up Node.js 22.x environment
+- Sets up PostgreSQL 18.1 environment
 - Installs dependencies with `npm ci`
 - Runs linting with `npm run lint`
-- Runs all tests with `npm test` which will run all the tests for `fizzBuzz` and `fleet` projects.
+- Runs database migrations with `npm run db:push`
+- Runs algo tests with `npm run test:algo`
+- Runs fleet tests (including persistence) with `npm run test:fleet:all`
 - Builds the fleet project with `npm run build:fleet`
 
 This ensures code quality and test coverage are maintained.
