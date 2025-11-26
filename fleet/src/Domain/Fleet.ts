@@ -1,5 +1,5 @@
 import { Vehicle } from './Vehicle';
-import { Location } from './Location';
+import type { Location } from './Location';
 import { VehicleAlreadyRegisteredError } from './Errors/VehicleAlreadyRegisteredError';
 import { VehicleAlreadyParkedError } from './Errors/VehicleAlreadyParkedError';
 import { VehicleNotRegisteredError } from './Errors/VehicleNotRegisteredError';
@@ -10,7 +10,7 @@ export class Fleet {
 
   constructor(
     public readonly fleetId: number,
-    public readonly userId: string
+    public readonly userId: string,
   ) {
     this.vehicles = new Set();
     this.vehicleLocations = new Map();

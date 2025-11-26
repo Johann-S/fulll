@@ -9,10 +9,10 @@ const main = () => {
   fizzBuzz({
     rules: [
       { divisor: 3, output: 'Fizz' },
-      { divisor: 5, output: 'Buzz' }
+      { divisor: 5, output: 'Buzz' },
     ],
     start,
-    end
+    end,
   })
     .forEach((value, index) => {
       const num = start + index;

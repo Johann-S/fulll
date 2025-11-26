@@ -13,7 +13,7 @@ export const fleets = pgTable('fleets', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   userId: varchar('user_id', { length: 255 }).notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
-  updatedAt: timestamp('updated_at').notNull().defaultNow()
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
 }, (table) => [
   uniqueIndex('fleets_user_id_idx').on(table.userId),
 ]);
@@ -27,7 +27,9 @@ export const vehicles = pgTable('vehicles', {
 // A vehicle can belong to multiple fleets (many-to-many relationship)
 export const fleetVehicles = pgTable('fleet_vehicles', {
   fleetId: integer('fleet_id').notNull().references(() => fleets.id, { onDelete: 'cascade' }),
-  plateNumber: varchar('plate_number', { length: 50 }).notNull().references(() => vehicles.plateNumber, { onDelete: 'cascade' }),
+  plateNumber: varchar('plate_number', { length: 50 })
+    .notNull()
+    .references(() => vehicles.plateNumber, { onDelete: 'cascade' }),
   registeredAt: timestamp('registered_at').notNull().defaultNow(),
 }, (table) => [
   // Composite primary key: a vehicle can only be registered once per fleet
@@ -41,7 +43,9 @@ export const fleetVehicles = pgTable('fleet_vehicles', {
 export const vehicleLocations = pgTable('vehicle_locations', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   fleetId: integer('fleet_id').notNull().references(() => fleets.id, { onDelete: 'cascade' }),
-  plateNumber: varchar('plate_number', { length: 50 }).notNull().references(() => vehicles.plateNumber, { onDelete: 'cascade' }),
+  plateNumber: varchar('plate_number', { length: 50 })
+    .notNull()
+    .references(() => vehicles.plateNumber, { onDelete: 'cascade' }),
   // Using DECIMAL for precise geographic coordinates
   latitude: decimal('latitude', { precision: 10, scale: 8 }).notNull(), // -90.00000000 to 90.00000000
   longitude: decimal('longitude', { precision: 11, scale: 8 }).notNull(), // -180.00000000 to 180.00000000

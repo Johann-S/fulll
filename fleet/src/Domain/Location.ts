@@ -10,7 +10,7 @@ export class Location {
   constructor(
     public readonly lat: number,
     public readonly lng: number,
-    public readonly alt?: number
+    public readonly alt?: number,
   ) {
     schema.parse({ lat, lng, alt });
   }

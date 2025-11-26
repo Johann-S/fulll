@@ -1,7 +1,7 @@
-import { Fleet } from '../../Domain/Fleet';
-import { FleetRepository } from '../../Domain/FleetRepository';
+import type { Fleet } from '../../Domain/Fleet';
+import type { FleetRepository } from '../../Domain/FleetRepository';
 
-import { CreateFleetCommand } from './CreateFleetCommand';
+import type { CreateFleetCommand } from './CreateFleetCommand';
 
 export class CreateFleetHandler {
   constructor(private readonly fleetRepository: FleetRepository) {}

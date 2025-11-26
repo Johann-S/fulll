@@ -7,7 +7,8 @@
   },
   "scripts": {
     "algo": "tsx algo/src/main.ts",
-    "test": "npm run test:algo && npm run test:fleet && npm run build:fleet",
+    "lint": "eslint .",
+    "test": "npm run test:algo && npm run test:fleet",
     "test:algo": "tsx --test algo/src/**/*.test.ts",
     "test:fleet": "cucumber-js -c fleet/cucumber.cjs",
     "test:fleet:persistence": "cross-env TEST_PERSISTENCE=true cucumber-js -c fleet/cucumber.cjs --profile persistence",
@@ -29,12 +30,18 @@
   },
   "devDependencies": {
     "@cucumber/cucumber": "^12.2.0",
+    "@eslint/js": "^9.39.1",
+    "@stylistic/eslint-plugin": "^5.6.1",
     "@types/node": "^22.19.1",
     "@types/pg": "^8.15.6",
     "cross-env": "^10.1.0",
     "drizzle-kit": "^0.31.7",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "jiti": "^2.6.1",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.48.0"
   },
   "engines": {
     "node": ">=22.0.0"

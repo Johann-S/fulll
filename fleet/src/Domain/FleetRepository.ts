@@ -1,4 +1,4 @@
-import { Fleet } from './Fleet';
+import type { Fleet } from './Fleet';
 
 export interface FleetRepository {
   create(userId: string): Promise<Fleet>;

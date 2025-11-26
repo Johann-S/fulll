@@ -9,10 +9,10 @@ describe('FizzBuzz', () => {
       const result = fizzBuzz({
         rules: [
           { divisor: 3, output: 'Fizz' },
-          { divisor: 5, output: 'Buzz' }
+          { divisor: 5, output: 'Buzz' },
         ],
         start: 1,
-        end: 2
+        end: 2,
       });
 
       assert.deepStrictEqual(result, ['1', '2']);
@@ -22,10 +22,10 @@ describe('FizzBuzz', () => {
       const result = fizzBuzz({
         rules: [
           { divisor: 3, output: 'Fizz' },
-          { divisor: 5, output: 'Buzz' }
+          { divisor: 5, output: 'Buzz' },
         ],
         start: 3,
-        end: 3
+        end: 3,
       });
 
       assert.deepStrictEqual(result, ['Fizz']);
@@ -35,10 +35,10 @@ describe('FizzBuzz', () => {
       const result = fizzBuzz({
         rules: [
           { divisor: 3, output: 'Fizz' },
-          { divisor: 5, output: 'Buzz' }
+          { divisor: 5, output: 'Buzz' },
         ],
         start: 5,
-        end: 5
+        end: 5,
       });
 
       assert.deepStrictEqual(result, ['Buzz']);
@@ -48,10 +48,10 @@ describe('FizzBuzz', () => {
       const result = fizzBuzz({
         rules: [
           { divisor: 3, output: 'Fizz' },
-          { divisor: 5, output: 'Buzz' }
+          { divisor: 5, output: 'Buzz' },
         ],
         start: 15,
-        end: 15
+        end: 15,
       });
 
       assert.deepStrictEqual(result, ['FizzBuzz']);
@@ -62,10 +62,10 @@ describe('FizzBuzz', () => {
     it('should work with a custom rule not related to FizzBuzz', () => {
       const result = fizzBuzz({
         rules: [
-          { divisor: 2, output: 'Even' }
+          { divisor: 2, output: 'Even' },
         ],
         start: 1,
-        end: 4
+        end: 4,
       });
 
       assert.deepStrictEqual(result, ['1', 'Even', '3', 'Even']);

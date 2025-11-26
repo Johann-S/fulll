@@ -1,6 +1,6 @@
-import { RegisterVehicleCommand } from './RegisterVehicleCommand';
+import type { RegisterVehicleCommand } from './RegisterVehicleCommand';
 
-import { FleetRepository } from '../../Domain/FleetRepository';
+import type { FleetRepository } from '../../Domain/FleetRepository';
 import { Vehicle } from '../../Domain/Vehicle';
 
 export class RegisterVehicleHandler {

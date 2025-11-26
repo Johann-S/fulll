@@ -1,5 +1,5 @@
 import { Location } from '../Domain/Location';
-import { FleetRepository } from '../Domain/FleetRepository';
+import type { FleetRepository } from '../Domain/FleetRepository';
 
 import { CreateFleetCommand } from './Command/CreateFleetCommand';
 import { CreateFleetHandler } from './Command/CreateFleetHandler';

@@ -11,7 +11,7 @@ export class ParkVehicleCommand {
   constructor(
     public readonly fleetId: number,
     public readonly plateNumber: string,
-    public readonly location: Location
+    public readonly location: Location,
   ) {
     schema.parse({ fleetId, plateNumber, location });
   }

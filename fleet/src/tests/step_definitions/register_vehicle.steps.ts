@@ -1,7 +1,7 @@
 import { When, Then } from '@cucumber/cucumber';
 import assert from 'node:assert';
 
-import { FleetWorld } from '../support/world';
+import type { FleetWorld } from '../support/world';
 import { RegisterVehicleCommand } from '../../App/Command/RegisterVehicleCommand';
 import { VehicleAlreadyRegisteredError } from '../../Domain/Errors/VehicleAlreadyRegisteredError';
 
@@ -11,7 +11,7 @@ When('I register this vehicle into my fleet', async function (this: FleetWorld) 
 
   const command = new RegisterVehicleCommand(
     this.myFleet.fleetId,
-    this.currentVehicle.plateNumber
+    this.currentVehicle.plateNumber,
   );
   await this.registerVehicleHandler.handle(command);
 
@@ -25,7 +25,7 @@ When('I try to register this vehicle into my fleet', async function (this: Fleet
   try {
     const command = new RegisterVehicleCommand(
       this.myFleet.fleetId,
-      this.currentVehicle.plateNumber
+      this.currentVehicle.plateNumber,
     );
     await this.registerVehicleHandler.handle(command);
   } catch (error) {
@@ -46,6 +46,6 @@ Then('I should be informed this this vehicle has already been registered into my
   assert(this.lastError, 'An error should have been thrown');
   assert(
     this.lastError instanceof VehicleAlreadyRegisteredError,
-    `Expected VehicleAlreadyRegisteredError but got ${this.lastError.constructor.name}`
+    `Expected VehicleAlreadyRegisteredError but got ${this.lastError.constructor.name}`,
   );
 });

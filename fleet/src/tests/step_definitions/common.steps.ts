@@ -37,7 +37,7 @@ Given('I have registered this vehicle into my fleet', async function (this: Flee
 
   const command = new RegisterVehicleCommand(
     this.myFleet.fleetId,
-    this.currentVehicle.plateNumber
+    this.currentVehicle.plateNumber,
   );
   await this.registerVehicleHandler.handle(command);
 });
@@ -48,7 +48,7 @@ Given('this vehicle has been registered into the other user\'s fleet', async fun
 
   const command = new RegisterVehicleCommand(
     this.otherFleet.fleetId,
-    this.currentVehicle.plateNumber
+    this.currentVehicle.plateNumber,
   );
   await this.registerVehicleHandler.handle(command);
 });
@@ -61,7 +61,7 @@ Given('my vehicle has been parked into this location', async function (this: Fle
   const command = new ParkVehicleCommand(
     this.myFleet.fleetId,
     this.currentVehicle.plateNumber,
-    this.currentLocation
+    this.currentLocation,
   );
   await this.parkVehicleHandler.handle(command);
 });

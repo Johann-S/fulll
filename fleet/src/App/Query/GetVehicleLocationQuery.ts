@@ -8,7 +8,7 @@ const schema = z.object({
 export class GetVehicleLocationQuery {
   constructor(
     public readonly fleetId: number,
-    public readonly plateNumber: string
+    public readonly plateNumber: string,
   ) {
     schema.parse({ fleetId, plateNumber });
   }

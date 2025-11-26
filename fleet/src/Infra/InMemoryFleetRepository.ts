@@ -1,5 +1,5 @@
 import { Fleet } from '../Domain/Fleet';
-import { FleetRepository } from '../Domain/FleetRepository';
+import type { FleetRepository } from '../Domain/FleetRepository';
 
 export class InMemoryFleetRepository implements FleetRepository {
   private fleets: Map<number, Fleet>;

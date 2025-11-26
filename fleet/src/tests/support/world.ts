@@ -1,10 +1,10 @@
-import { World, IWorldOptions } from '@cucumber/cucumber';
+import { World, type IWorldOptions } from '@cucumber/cucumber';
 import dotenv from 'dotenv';
 
-import { Fleet } from '../../Domain/Fleet';
+import type { Fleet } from '../../Domain/Fleet';
 import { Vehicle } from '../../Domain/Vehicle';
 import { Location } from '../../Domain/Location';
-import { FleetRepository } from '../../Domain/FleetRepository';
+import type { FleetRepository } from '../../Domain/FleetRepository';
 
 import { InMemoryFleetRepository } from '../../Infra/InMemoryFleetRepository';
 import { PostgresFleetRepository } from '../../Infra/PostgresFleetRepository';

@@ -3,7 +3,7 @@ import { count, eq, and } from 'drizzle-orm';
 import { Fleet } from '../Domain/Fleet';
 import { Vehicle } from '../Domain/Vehicle';
 import { Location } from '../Domain/Location';
-import { FleetRepository } from '../Domain/FleetRepository';
+import type { FleetRepository } from '../Domain/FleetRepository';
 
 import { getDatabase } from './Database/connection';
 import { fleets, vehicles, fleetVehicles, vehicleLocations } from './Database/schema';
@@ -68,7 +68,7 @@ export class PostgresFleetRepository implements FleetRepository {
       const location = new Location(
         parseFloat(locationData.latitude),
         parseFloat(locationData.longitude),
-        locationData.altitude ? parseFloat(locationData.altitude) : undefined
+        locationData.altitude ? parseFloat(locationData.altitude) : undefined,
       );
 
       fleet.parkVehicle(new Vehicle(locationData.plateNumber), location);
@@ -102,7 +102,7 @@ export class PostgresFleetRepository implements FleetRepository {
       .where(eq(fleetVehicles.fleetId, fleet.fleetId));
 
     const existingPlateNumbers = new Set(
-      existingFleetVehicles.map(v => v.plateNumber)
+      existingFleetVehicles.map(v => v.plateNumber),
     );
 
     await Promise.all(
@@ -117,7 +117,7 @@ export class PostgresFleetRepository implements FleetRepository {
           await tx
             .insert(fleetVehicles)
             .values({ fleetId: fleet.fleetId, plateNumber: mVehicle.plateNumber });
-        })
+        }),
     );
   }
 
@@ -130,9 +130,9 @@ export class PostgresFleetRepository implements FleetRepository {
             tx,
             fleet.fleetId,
             vehicle,
-            fleet.getVehicleLocation(vehicle)!
-          )
-        )
+            fleet.getVehicleLocation(vehicle)!,
+          ),
+        ),
     );
   }
 
@@ -140,7 +140,7 @@ export class PostgresFleetRepository implements FleetRepository {
     tx: DbExecutor,
     fleetId: number,
     vehicle: Vehicle,
-    location: Location
+    location: Location,
   ): Promise<void> {
     const existingLocation = await tx
       .select()
@@ -148,8 +148,8 @@ export class PostgresFleetRepository implements FleetRepository {
       .where(
         and(
           eq(vehicleLocations.fleetId, fleetId),
-          eq(vehicleLocations.plateNumber, vehicle.plateNumber)
-        )
+          eq(vehicleLocations.plateNumber, vehicle.plateNumber),
+        ),
       )
       .limit(1);
 
@@ -169,8 +169,8 @@ export class PostgresFleetRepository implements FleetRepository {
         .where(
           and(
             eq(vehicleLocations.fleetId, fleetId),
-            eq(vehicleLocations.plateNumber, vehicle.plateNumber)
-          )
+            eq(vehicleLocations.plateNumber, vehicle.plateNumber),
+          ),
         );
     } else {
       await tx

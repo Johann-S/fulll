@@ -97,6 +97,28 @@ The CI pipeline automatically:
 
 This ensures code quality and test coverage are maintained.
 
+## Code Quality
+
+This project uses **ESLint** for static code analysis and code quality enforcement.
+
+**Why ESLint was added:**
+- **Static analysis** - Catches bugs, anti-patterns, and code smells before runtime
+- **Type safety enforcement** - TypeScript-aware rules prevent type-related issues and ensure type safety
+- **Code consistency** - Enforces consistent coding conventions (naming, imports, formatting) across the codebase
+- **Prevents common mistakes** - Detects unused variables, incorrect equality operators (`==` vs `===`), and missing error handling
+- **Maintainability** - Makes code easier to read, review, and maintain for the entire team
+
+**Run linting:**
+```bash
+npm run lint
+```
+
+The ESLint configuration includes:
+- TypeScript-specific rules for type safety
+- Stylistic rules for consistent code formatting
+- Best practices enforcement (prefer const, no var, etc.)
+- Code quality rules (no unused vars, no debugger, etc.)
+
 ## Technologies Used
 
 - **TypeScript** - Type-safe JavaScript

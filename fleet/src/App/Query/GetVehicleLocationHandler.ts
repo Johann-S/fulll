@@ -1,6 +1,6 @@
-import { GetVehicleLocationQuery } from './GetVehicleLocationQuery';
+import type { GetVehicleLocationQuery } from './GetVehicleLocationQuery';
 
-import { FleetRepository } from '../../Domain/FleetRepository';
+import type { FleetRepository } from '../../Domain/FleetRepository';
 import { Vehicle } from '../../Domain/Vehicle';
 
 export class GetVehicleLocationHandler {
