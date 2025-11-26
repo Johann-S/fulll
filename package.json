@@ -1,16 +1,37 @@
 {
   "name": "fulll",
   "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "fleet": "./fleet/dist/cli.js"
+  },
   "scripts": {
     "algo": "tsx algo/src/main.ts",
     "test:algo": "tsx --test algo/src/**/*.test.ts",
-    "test:fleet": "cucumber-js -c fleet/cucumber.js"
+    "test:fleet": "cucumber-js -c fleet/cucumber.cjs",
+    "test:fleet:persistence": "cross-env TEST_PERSISTENCE=true cucumber-js -c fleet/cucumber.cjs --profile persistence",
+    "test:fleet:all": "cucumber-js -c fleet/cucumber.cjs --profile all",
+    "fleet": "tsx fleet/src/cli.ts",
+    "build:fleet": "tsc -p fleet/tsconfig.json",
+    "db:generate": "drizzle-kit --config=fleet/drizzle.config.ts generate",
+    "db:migrate": "drizzle-kit --config=fleet/drizzle.config.ts migrate",
+    "db:push": "drizzle-kit --config=fleet/drizzle.config.ts push"
   },
   "author": "Johann-S <johann.servoire@gmail.com>",
   "description": "Test fulll",
+  "dependencies": {
+    "commander": "^14.0.2",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.44.7",
+    "pg": "^8.16.3",
+    "zod": "^4.1.13"
+  },
   "devDependencies": {
     "@cucumber/cucumber": "^12.2.0",
     "@types/node": "^22.19.1",
+    "@types/pg": "^8.15.6",
+    "cross-env": "^10.1.0",
+    "drizzle-kit": "^0.31.7",
     "tsx": "^4.20.6"
   },
   "engines": {

@@ -5,7 +5,7 @@ import { FleetWorld } from '../support/world';
 import { RegisterVehicleCommand } from '../../App/Command/RegisterVehicleCommand';
 import { VehicleAlreadyRegisteredError } from '../../Domain/Errors/VehicleAlreadyRegisteredError';
 
-When('I register this vehicle into my fleet', function (this: FleetWorld) {
+When('I register this vehicle into my fleet', async function (this: FleetWorld) {
   assert(this.myFleet, 'My fleet must exist');
   assert(this.currentVehicle, 'Current vehicle must exist');
 
@@ -13,12 +13,12 @@ When('I register this vehicle into my fleet', function (this: FleetWorld) {
     this.myFleet.fleetId,
     this.currentVehicle.plateNumber
   );
-  this.registerVehicleHandler.handle(command);
+  await this.registerVehicleHandler.handle(command);
 
-  this.myFleet = this.fleetRepository.findById(this.myFleet.fleetId);
+  this.myFleet = await this.fleetRepository.findById(this.myFleet.fleetId);
 });
 
-When('I try to register this vehicle into my fleet', function (this: FleetWorld) {
+When('I try to register this vehicle into my fleet', async function (this: FleetWorld) {
   assert(this.myFleet, 'My fleet must exist');
   assert(this.currentVehicle, 'Current vehicle must exist');
 
@@ -27,7 +27,7 @@ When('I try to register this vehicle into my fleet', function (this: FleetWorld)
       this.myFleet.fleetId,
       this.currentVehicle.plateNumber
     );
-    this.registerVehicleHandler.handle(command);
+    await this.registerVehicleHandler.handle(command);
   } catch (error) {
     this.lastError = error as Error;
   }

@@ -5,8 +5,9 @@ import { FleetWorld } from '../support/world';
 import { ParkVehicleCommand } from '../../App/Command/ParkVehicleCommand';
 import { GetVehicleLocationQuery } from '../../App/Query/GetVehicleLocationQuery';
 import { VehicleAlreadyParkedError } from '../../Domain/Errors/VehicleAlreadyParkedError';
+import { VehicleNotRegisteredError } from '../../Domain/Errors/VehicleNotRegisteredError';
 
-When('I park my vehicle at this location', function (this: FleetWorld) {
+When('I park my vehicle at this location', async function (this: FleetWorld) {
   assert(this.myFleet, 'My fleet must exist');
   assert(this.currentVehicle, 'Current vehicle must exist');
   assert(this.currentLocation, 'Current location must exist');
@@ -16,11 +17,11 @@ When('I park my vehicle at this location', function (this: FleetWorld) {
     this.currentVehicle.plateNumber,
     this.currentLocation
   );
-  this.parkVehicleHandler.handle(command);
-  this.myFleet = this.fleetRepository.findById(this.myFleet.fleetId);
+  await this.parkVehicleHandler.handle(command);
+  this.myFleet = await this.fleetRepository.findById(this.myFleet.fleetId);
 });
 
-When('I try to park my vehicle at this location', function (this: FleetWorld) {
+When('I try to park my vehicle at this location', async function (this: FleetWorld) {
   assert(this.myFleet, 'My fleet must exist');
   assert(this.currentVehicle, 'Current vehicle must exist');
   assert(this.currentLocation, 'Current location must exist');
@@ -31,13 +32,13 @@ When('I try to park my vehicle at this location', function (this: FleetWorld) {
       this.currentVehicle.plateNumber,
       this.currentLocation
     );
-    this.parkVehicleHandler.handle(command);
+    await this.parkVehicleHandler.handle(command);
   } catch (error) {
     this.lastError = error as Error;
   }
 });
 
-Then('the known location of my vehicle should verify this location', function (this: FleetWorld) {
+Then('the known location of my vehicle should verify this location', async function (this: FleetWorld) {
   assert(this.myFleet, 'My fleet must exist');
   assert(this.currentVehicle, 'Current vehicle must exist');
   assert(this.currentLocation, 'Current location must exist');
@@ -46,7 +47,7 @@ Then('the known location of my vehicle should verify this location', function (t
     this.myFleet.fleetId,
     this.currentVehicle.plateNumber
   );
-  const location = this.getVehicleLocationHandler.handle(query);
+  const location = await this.getVehicleLocationHandler.handle(query);
 
   assert(location, 'Vehicle should have a location');
   assert(
@@ -60,5 +61,13 @@ Then('I should be informed that my vehicle is already parked at this location', 
   assert(
     this.lastError instanceof VehicleAlreadyParkedError,
     `Expected VehicleAlreadyParkedError but got ${this.lastError.constructor.name}`
+  );
+});
+
+Then('I should be informed that this vehicle is not registered in my fleet', function (this: FleetWorld) {
+  assert(this.lastError, 'An error should have been thrown');
+  assert(
+    this.lastError instanceof VehicleNotRegisteredError,
+    `Expected VehicleNotRegisteredError but got ${this.lastError.constructor.name}`
   );
 });

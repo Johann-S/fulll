@@ -2,13 +2,14 @@ import { Vehicle } from './Vehicle';
 import { Location } from './Location';
 import { VehicleAlreadyRegisteredError } from './Errors/VehicleAlreadyRegisteredError';
 import { VehicleAlreadyParkedError } from './Errors/VehicleAlreadyParkedError';
+import { VehicleNotRegisteredError } from './Errors/VehicleNotRegisteredError';
 
 export class Fleet {
   private vehicles: Set<string>;
   private vehicleLocations: Map<string, Location>;
 
   constructor(
-    public readonly fleetId: string,
+    public readonly fleetId: number,
     public readonly userId: string
   ) {
     this.vehicles = new Set();
@@ -24,6 +25,10 @@ export class Fleet {
   }
 
   parkVehicle(vehicle: Vehicle, location: Location) {
+    if (!this.vehicles.has(vehicle.plateNumber)) {
+      throw new VehicleNotRegisteredError(vehicle.plateNumber);
+    }
+
     const currentLocation = this.vehicleLocations.get(vehicle.plateNumber);
 
     if (currentLocation && currentLocation.equals(location)) {

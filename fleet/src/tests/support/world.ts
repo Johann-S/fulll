@@ -1,19 +1,26 @@
 import { World, IWorldOptions } from '@cucumber/cucumber';
+import dotenv from 'dotenv';
 
 import { Fleet } from '../../Domain/Fleet';
 import { Vehicle } from '../../Domain/Vehicle';
 import { Location } from '../../Domain/Location';
+import { FleetRepository } from '../../Domain/FleetRepository';
+
 import { InMemoryFleetRepository } from '../../Infra/InMemoryFleetRepository';
+import { PostgresFleetRepository } from '../../Infra/PostgresFleetRepository';
+
 import { RegisterVehicleHandler } from '../../App/Command/RegisterVehicleHandler';
 import { ParkVehicleHandler } from '../../App/Command/ParkVehicleHandler';
 import { GetVehicleLocationHandler } from '../../App/Query/GetVehicleLocationHandler';
+
+dotenv.config();
 
 /**
  * Custom World for BDD tests
  * Holds the state and context for scenario execution
  */
 export class FleetWorld extends World {
-  public fleetRepository: InMemoryFleetRepository;
+  public fleetRepository: FleetRepository;
   public registerVehicleHandler: RegisterVehicleHandler;
   public parkVehicleHandler: ParkVehicleHandler;
   public getVehicleLocationHandler: GetVehicleLocationHandler;
@@ -27,20 +34,27 @@ export class FleetWorld extends World {
   constructor(options: IWorldOptions) {
     super(options);
 
-    this.fleetRepository = new InMemoryFleetRepository();
+    const usePersistence = process.env.TEST_PERSISTENCE === 'true';
+
+    if (usePersistence) {
+      this.fleetRepository = new PostgresFleetRepository();
+    } else {
+      this.fleetRepository = new InMemoryFleetRepository();
+    }
+
     this.registerVehicleHandler = new RegisterVehicleHandler(this.fleetRepository);
     this.parkVehicleHandler = new ParkVehicleHandler(this.fleetRepository);
     this.getVehicleLocationHandler = new GetVehicleLocationHandler(this.fleetRepository);
   }
 
-  createMyFleet(userId: string = 'user-1'): Fleet {
-    this.myFleet = this.createFleet(userId);
+  async createMyFleet(userId: string = `u${Date.now()}`): Promise<Fleet> {
+    this.myFleet = await this.createFleet(userId);
 
     return this.myFleet;
   }
 
-  createOtherFleet(userId: string = 'user-2') {
-    this.otherFleet = this.createFleet(userId);
+  async createOtherFleet(userId: string = `u${Date.now() + 7}`) {
+    this.otherFleet = await this.createFleet(userId);
 
     return this.otherFleet;
   }
@@ -59,7 +73,10 @@ export class FleetWorld extends World {
   }
 
   reset() {
-    this.fleetRepository.clear();
+    if (this.fleetRepository instanceof InMemoryFleetRepository) {
+      this.fleetRepository.clear();
+    }
+
     this.myFleet = undefined;
     this.otherFleet = undefined;
     this.currentVehicle = undefined;
@@ -67,11 +84,7 @@ export class FleetWorld extends World {
     this.lastError = undefined;
   }
 
-  private createFleet(userId: string) {
-    const fleetId = `fleet-${Date.now()}-${Math.random()}`;
-    const fleet = new Fleet(fleetId, userId);
-
-    this.fleetRepository.save(fleet);
-    return fleet;
+  private async createFleet(userId: string) {
+    return await this.fleetRepository.create(userId);
   }
 }

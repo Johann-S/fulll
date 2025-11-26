@@ -1,19 +1,18 @@
+import { z } from 'zod/v4';
+
+const schema = z.object({
+  lat: z.coerce.number().min(-90).max(90),
+  lng: z.coerce.number().min(-180).max(180),
+  alt: z.coerce.number().optional(),
+});
+
 export class Location {
   constructor(
     public readonly lat: number,
     public readonly lng: number,
     public readonly alt?: number
   ) {
-    this.validate();
-  }
-
-  private validate() {
-    if (this.lat < -90 || this.lat > 90) {
-      throw new Error('Latitude must be between -90 and 90');
-    }
-    if (this.lng < -180 || this.lng > 180) {
-      throw new Error('Longitude must be between -180 and 180');
-    }
+    schema.parse({ lat, lng, alt });
   }
 
   equals(other: Location) {

@@ -11,6 +11,13 @@ Feature: Register a vehicle
     When I register this vehicle into my fleet
     Then this vehicle should be part of my vehicle fleet
 
+  @critical @persistence
+  Scenario: I can register a vehicle (with persistence)
+    Given my fleet
+    And a vehicle
+    When I register this vehicle into my fleet
+    Then this vehicle should be part of my vehicle fleet
+
   Scenario: I can't register same vehicle twice
     Given my fleet
     And a vehicle

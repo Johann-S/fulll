@@ -36,11 +36,12 @@ This will run all unit tests across using Node.js's native test runner.
 
 ### [Back/DDD/CQRS] Vehicle Fleet Parking Management
 
-Vehicle fleet management system using Domain-Driven Design (DDD) and CQRS principles with BDD tests.
+Vehicle fleet management system using Domain-Driven Design (DDD) and CQRS principles with BDD tests and CLI.
 
 - 📁 **Location**: [`fleet/`](./fleet)
 - 🏗️ **Architecture**: DDD/CQRS with clean architecture
 - 🧪 **Testing**: Cucumber.js BDD tests
+- 🖥️ **CLI**: Commander.js-based command-line interface
 
 **Test:**
 ```bash
@@ -49,12 +50,38 @@ npm run test:fleet
 
 This will run all BDD scenarios using Cucumber.js.
 
+**Database Setup:**
+```bash
+# Start PostgreSQL with Docker
+docker-compose up -d
+
+# Apply db schema
+npm run db:push
+```
+
+**CLI Usage:**
+```bash
+# Using npm script
+npm run fleet -- create <userId>
+npm run fleet -- register-vehicle <fleetId> <vehiclePlateNumber>
+npm run fleet -- localize-vehicle <fleetId> <vehiclePlateNumber> <lat> <lng> [alt]
+npm run fleet -- get-vehicle-location <fleetId> <vehiclePlateNumber>
+
+# Using wrapper script (Unix/Mac/Git Bash)
+./fleet.sh create <userId>
+./fleet.sh register-vehicle <fleetId> <vehiclePlateNumber>
+./fleet.sh localize-vehicle <fleetId> <vehiclePlateNumber> <lat> <lng> [alt]
+./fleet.sh get-vehicle-location <fleetId> <vehiclePlateNumber>
+```
+
 **Features:**
 - Register vehicles into fleets
 - Park vehicles at locations (GPS coordinates)
 - Query vehicle locations
-- In-memory persistence
+- PostgreSQL persistence with Drizzle ORM
+- Docker Compose for easy database setup
 - Complete test coverage with Gherkin scenarios
+- Command-line interface for all operations
 
 ## Technologies Used
 
@@ -62,3 +89,7 @@ This will run all BDD scenarios using Cucumber.js.
 - **tsx** - TypeScript execution engine
 - **Node.js** - Runtime environment
 - **Cucumber.js** - BDD testing framework
+- **Commander.js** - CLI framework
+- **Drizzle ORM** - TypeScript ORM for PostgreSQL
+- **PostgreSQL** - Relational database
+- **Docker** - Containerization

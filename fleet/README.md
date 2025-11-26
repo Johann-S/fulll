@@ -1,6 +1,6 @@
 # Vehicle Fleet Parking Management
 
-A vehicle fleet parking management system implementing **Domain-Driven Design (DDD)** and **CQRS** principles with comprehensive BDD tests.
+A vehicle fleet parking management system implementing **Domain-Driven Design (DDD)** and **CQRS** principles with comprehensive BDD tests and a command-line interface.
 
 ## Architecture
 
@@ -22,6 +22,7 @@ fleet/
 │   │   └── Errors/       # Domain Errors
 │   ├── Infra/            # Infrastructure Layer
 │   │   └── InMemoryFleetRepository.ts
+│   ├── cli.ts            # CLI Entry Point
 │   └── tests/            # BDD Tests
 │       ├── features/     # Gherkin scenarios
 │       ├── step_definitions/  # Cucumber steps
@@ -61,11 +62,63 @@ fleet/
 
 ## Testing
 
-### Run Tests
+### Test Profiles
+
+This project uses **Cucumber profiles** to separate tests based on infrastructure requirements:
+
+#### 1. **Default Profile** (In-Memory, Fast)
+
+Runs tests with `InMemoryFleetRepository` - no database required:
 
 ```bash
 npm run test:fleet
 ```
+
+- ✅ Fast execution
+- ✅ No infrastructure setup needed
+- ✅ Perfect for TDD/development
+- ❌ Doesn't test real database integration
+
+#### 2. **Persistence Profile** (PostgreSQL, Integration)
+
+Runs tests tagged with `@persistence` using `PostgresFleetRepository`:
+
+```bash
+npm run test:fleet:persistence
+```
+
+**Prerequisites:**
+1. PostgreSQL database running (via Docker):
+   ```bash
+   docker-compose up -d
+   ```
+
+2. Run migrations:
+   ```bash
+   npm run db:push
+   ```
+
+- ✅ Tests real database integration
+- ✅ Validates serialization/deserialization
+- ✅ Ensures PostgreSQL schema is correct
+- ❌ Slower execution
+- ❌ Requires infrastructure
+
+#### 3. **All Profile** (Both)
+
+Runs all tests regardless of tags:
+
+```bash
+npm run test:fleet:all
+```
+
+### Test Strategy
+
+Following BDD best practices:
+
+- **Critical business logic** (`@critical`): Tested with in-memory repository (fast feedback)
+- **Persistence scenarios** (`@persistence`): Test the same scenarios but with PostgreSQL
+- **Non-critical scenarios**: Remain in-memory only
 
 ### BDD Features
 
@@ -77,3 +130,144 @@ npm run test:fleet
 #### Park Vehicle (`park_vehicle.feature`)
 - ✅ Successfully park a vehicle at a location
 - ✅ Prevent parking at the same location twice
+
+## Command-Line Interface
+
+### Installation
+
+The CLI is available after installing dependencies:
+
+```bash
+npm ci
+```
+
+### Usage
+
+#### Using npm script:
+
+```bash
+npm run fleet -- <command> [arguments]
+```
+
+#### Using wrapper script (Unix/Mac/Git Bash):
+
+```bash
+./fleet.sh <command> [arguments]
+```
+
+### Available Commands
+
+#### 1. Create a Fleet
+
+```bash
+npm run fleet -- create <userId>
+```
+
+**Example:**
+```bash
+npm run fleet -- create user123
+# Output: 1
+```
+
+Creates a new fleet for the specified user and returns the fleet ID.
+
+#### 2. Register a Vehicle
+
+```bash
+npm run fleet -- register-vehicle <fleetId> <vehiclePlateNumber>
+```
+
+**Example:**
+```bash
+npm run fleet -- register-vehicle 1 ABC-123
+# Output: Vehicle ABC-123 registered to fleet 1
+```
+
+Registers a vehicle with the given plate number to the specified fleet.
+
+#### 3. Localize a Vehicle
+
+```bash
+npm run fleet -- localize-vehicle <fleetId> <vehiclePlateNumber> <lat> <lng> [alt]
+```
+
+**Examples:**
+```bash
+# Without altitude
+npm run fleet -- localize-vehicle 1 ABC-123 48.8566 2.3522
+# Output: Vehicle ABC-123 localized at 48.8566, 2.3522
+
+# With altitude
+npm run fleet -- localize-vehicle 1 ABC-123 48.8566 2.3522 100
+# Output: Vehicle ABC-123 localized at 48.8566, 2.3522, 100
+```
+
+Sets the GPS location of a vehicle. Altitude is optional.
+
+#### 4. Get Vehicle Location
+
+```bash
+npm run fleet -- get-vehicle-location <fleetId> <vehiclePlateNumber>
+```
+
+**Example:**
+```bash
+npm run fleet -- get-vehicle-location 1 ABC-123
+# Output: Vehicle ABC-123 is at 48.8566, 2.3522, 100
+```
+
+Retrieves the current GPS location of a vehicle in the specified fleet. Returns latitude, longitude, and altitude (if set).
+
+**Error case:**
+```bash
+# Vehicle not registered in the fleet
+npm run fleet -- get-vehicle-location 1 XYZ-999
+# Error: Vehicle with plate number XYZ-999 is not registered in fleet 1
+```
+
+### Data Persistence
+
+The CLI uses **PostgreSQL** for data persistence when properly configured.
+
+#### Setup PostgreSQL
+
+1. Start the database:
+   ```bash
+   docker-compose up -d
+   ```
+
+2. Run migrations:
+   ```bash
+   npm run db:push
+   ```
+
+3. Configure environment (optional - defaults work with Docker setup):
+   ```bash
+   cp .env.example .env
+   # Edit .env if needed
+   ```
+
+Fleet data persists between CLI invocations when using PostgreSQL.
+
+### Error Handling
+
+The CLI properly handles domain errors:
+
+```bash
+# Trying to register the same vehicle twice
+npm run fleet -- register-vehicle 1 ABC-123
+# Error: Vehicle with plate number ABC-123 is already registered in this fleet
+
+# Trying to park at the same location twice
+npm run fleet -- localize-vehicle 1 ABC-123 48.8566 2.3522
+# Error: Vehicle with plate number ABC-123 is already parked at this location
+```
+
+### Help
+
+Get help on available commands:
+
+```bash
+npm run fleet -- --help
+npm run fleet -- <command> --help
+```
